@@ -1,0 +1,19 @@
+{
+  "name": "Plant Care App",
+  "version": "1.0.0",
+  "slug": "plant_care",
+  "description": "A plant care application with diagnostics and care tips.",
+  "startup": "application",
+  "boot": "auto",
+  "ports": {
+    "80": "80"
+  },
+  "map": ["config:rw", "addons:rw", "share:rw"],
+  "options": {
+    "port": 80
+  },
+  "schema": {
+    "port": "int"
+  },
+  "arch": ["armv7", "amd64"]
+}

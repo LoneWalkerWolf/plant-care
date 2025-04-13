@@ -1,0 +1,7 @@
+name: Plant Care Add-ons
+slug: plant_care_addons
+url: https://github.com/LoneWalkerWolf/plant-care
+description: Custom add-ons for plant care.
+repository: https://github.com/LoneWalkerWolf/plant-care
+add-ons:
+  - plant-care-addon
