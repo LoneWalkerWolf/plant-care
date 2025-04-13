@@ -1,7 +1,16 @@
 name: Plant Care Add-ons
-slug: plant_care_addons
-url: https://github.com/LoneWalkerWolf/plant-care
 description: Custom add-ons for plant care.
-repository: https://github.com/LoneWalkerWolf/plant-care
+slug: plant_care_addons
+version: "1.0.0"
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
 add-ons:
   - plant-care-addon
+
+
+
