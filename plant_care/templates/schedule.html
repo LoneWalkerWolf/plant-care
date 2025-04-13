@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Watering Schedule</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-brand">🌿 Plant Care</div>
+        <button class="burger" onclick="toggleMenu()">☰</button>
+        <div class="navbar-links" id="navbarLinks">
+          <a href="/schedule">Schedule</a>
+          <a href="/sync">Sync</a>
+        </div>
+    </div>
+
+    <h1>📆 Watering Schedule</h1>
+    <div id="calendar"></div>
+
+    <!-- ✅ PLACE THIS JUST BEFORE YOUR SCRIPT THAT USES IT -->
+    <script id="calendar-data" type="application/json">{{ events | safe }}</script>
+
+    <!-- ✅ Load FullCalendar -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+    <!-- ✅ Initialize calendar -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            const raw = document.getElementById('calendar-data').textContent;
+            let events = [];
+
+            try {
+                events = JSON.parse(raw);
+                console.log("📅 Events loaded into calendar:", events);
+            } catch (e) {
+                console.error("❌ Failed to parse events JSON:", e);
+            }
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: 600,
+                events: events
+            });
+
+            calendar.render();
+        });
+    </script>
+    <div id="loading-overlay" style="display:none;">
+        <div class="spinner"></div>
+      </div>
+      <script>
+        function showLoading() {
+            document.getElementById("loading-overlay").style.display = "flex";
+        }
+        
+        // Apply to all links that trigger GPT
+        document.querySelectorAll("a[data-loading]").forEach(link => {
+            link.addEventListener("click", showLoading);
+        });
+        
+        // Also apply to forms (like the watering POST)
+        document.querySelectorAll("form[data-loading]").forEach(form => {
+            form.addEventListener("submit", showLoading);
+        });
+        </script>
+        
+</body>
+
+</html>

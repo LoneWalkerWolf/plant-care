@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload New Plant Photo</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background-color: #1e1e1e;
+            color: #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-brand" onclick="toggleMenu()">🌿 Plant Care</div>
+        <div class="navbar-links" id="navbarLinks">
+            <a href="/upload" title="New Photo">📷</a>
+            <a href="/refresh_all" data-loading title="Refresh All">🔄</a>
+            <a href="/diagnose_all" data-loading title="Diagnose All">🧠</a>
+        </div>
+    </div>
+
+    <h1>📸 Upload New Photo</h1>
+
+    <div class="upload-box">
+        {% with messages = get_flashed_messages() %} {% if messages %} {% for msg in messages %}
+        <div class="flash">{{ msg }}</div>
+        {% endfor %} {% endif %} {% endwith %}
+
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required>
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+
+</body>
+
+</html>

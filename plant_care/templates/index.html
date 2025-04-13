@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Care Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-brand" onclick="toggleMenu()">🌿 Plant Care</div>
+        <div class="navbar-links" id="navbarLinks">
+            <a href="/refresh_all" data-loading title="Refresh All">🔄 Refresh All</a>
+            <a href="/diagnose_all" data-loading title="Diagnose All">🧠 Diagnose All</a>
+        </div>
+    </div>
+
+    <h1>My Plant Dashboard</h1>
+
+    {% if no_plants %}
+    <div class="no-plants-message">
+        <p>⚠️ No plants found. Please upload a photo of your plants to get started!</p>
+        <a href="/upload" class="action-btn">📷 Upload New Photo</a>
+    </div>
+    {% else %}
+
+    <div class="top-actions">
+        <a href="/upload?plant=new" class="action-btn">➕ Upload New Plant</a>
+    </div>
+    <!-- Existing plant card display code goes here -->
+    {% endif %} {% for plant in plants %}
+
+    <div class="card">
+        <h2>{{ plant.name }}</h2>
+        <img src="{{ plant.image_url }}" alt="{{ plant.name }}">
+        <p><strong>Last Watered:</strong> {{ plant.last_watered }}</p>
+        <div class="accordion">
+            <button class="accordion-btn">🧪 Latest Care Tips</button>
+            <div class="accordion-panel">
+                {{ plant.care_tips | safe }} {% if plant.care_history %}
+                <details>
+                    <summary>🕒 View Care History</summary>
+                    <ul>
+                        {% for item in plant.care_history %}
+                        <li><strong>{{ item.timestamp }}</strong>: {{ item.content | safe }}</li>
+                        {% endfor %}
+                    </ul>
+                </details>
+                {% endif %}
+            </div>
+            <button class="accordion-btn">🩺 Latest Diagnosis</button>
+            <div class="accordion-panel">
+                {{ plant.diagnosis | safe }} {% if plant.diagnosis_history %}
+                <details>
+                    <summary>🕒 View Diagnosis History</summary>
+                    <ul>
+                        {% for item in plant.diagnosis_history %}
+                        <li><strong>{{ item.timestamp }}</strong>: {{ item.content | safe }}</li>
+                        {% endfor %}
+                    </ul>
+                </details>
+                {% endif %}
+            </div>
+        </div>
+        <div class="button-row">
+            <form method="post" action="/water/{{ plant.id }}">
+                <button style="background-color: #36f459;" class="action-btn" type="submit">💧 Mark as Watered</button>
+            </form>
+            <form method="get" action="/refresh/{{ plant.id }}">
+                <button style="background-color: #36bbf4;" data-loading class="action-btn" type="submit">🔄 Refresh Tips</button>
+            </form>
+            <form method="get" action="/diagnose/{{ plant.id }}">
+                <button style="background-color: #f44336;" data-loading class="action-btn" type="submit">🧠 Diagnose Plant</button>
+            </form>
+            <a href="/upload?plant={{ plant.id }}" style="background-color: #f436d1;" class="action-btn">Upload New Image</a>
+            <a href="/reidentify/{{ plant.id }}" data-loading class="action-btn">🔍 Re-identify</a>
+        </div>
+
+
+    </div>
+    {% endfor %}
+    <div id="loading-overlay" style="display:none;">
+        <div class="spinner"></div>
+    </div>
+    <script>
+        function showLoading() {
+            document.getElementById("loading-overlay").style.display = "flex";
+        }
+
+        // Apply to all links that trigger GPT
+        document.querySelectorAll("a[data-loading]").forEach(link => {
+            link.addEventListener("click", showLoading);
+        });
+        document.querySelectorAll("button[data-loading]").forEach(form => {
+            link.addEventListener("submit", showLoading);
+        });
+        // Also apply to forms (like the watering POST)
+        document.querySelectorAll("form[data-loading]").forEach(form => {
+            form.addEventListener("submit", showLoading);
+        });
+    </script>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("navbarLinks");
+            menu.classList.toggle("show");
+        }
+    </script>
+    <script>
+        document.querySelectorAll(".accordion-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                btn.classList.toggle("active");
+                const panel = btn.nextElementSibling;
+                panel.style.display = (panel.style.display === "block") ? "none" : "block";
+            });
+        });
+    </script>
+</body>
+
+</html>
